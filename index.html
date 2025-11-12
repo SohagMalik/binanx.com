@@ -1,170 +1,623 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dynamic Dark Wallpaper Site</title>
-  <meta name="description" content="A dynamic dark-themed wallpaper website." />
-  <style>
-    :root{
-      --bg: #0b0f13;
-      --panel: #0f1720;
-      --muted: #9aa6b2;
-      --accent: #7c5cff;
-      --glass: rgba(255,255,255,0.03);
-      --card-shadow: 0 6px 18px rgba(2,6,23,0.6);
-      --radius: 12px;
-      --gap: 18px;
-      color-scheme: dark;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BinanX - Smart Auto Trading Powered by AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    *{box-sizing:border-box; margin:0; padding:0;}
-    html,body{height:100%; font-family:Inter, system-ui, sans-serif;}
-    body{
-      background:var(--bg);
-      color:#e6eef6;
-      line-height:1.4;
-      display:flex;
-      flex-direction:column;
-      transition: background 0.5s, color 0.5s;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
 
-    header{
-      position:sticky;
-      top:0;
-      background:var(--panel);
-      padding:12px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      z-index:100;
-      border-bottom:1px solid rgba(255,255,255,0.05);
-    }
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 40, 200, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .logo{font-weight:700;font-size:20px;color:var(--accent)}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
 
-    nav{display:flex; gap:10px; align-items:center;}
-    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.02);padding:6px 12px;border-radius:10px;cursor:pointer;color:#e6eef6;}
-    input[type='text']{padding:6px 10px;border-radius:8px;border:none;outline:none;}
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            animation: fadeDown 0.8s ease-out;
+        }
 
-    main{flex:1;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-    .wallpaper-card{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;}
-    .wallpaper-card img{width:100%;height:100%;object-fit:cover;transition:transform .3s; display:block;}
-    .wallpaper-card:hover img{transform:scale(1.1);}
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    /* fullscreen modal */
-    #fullscreenModal{
-      display:none;
-      position:fixed;
-      top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:200;
-      flex-direction:column;gap:10px;
-    }
-    #fullscreenModal img{max-width:90%; max-height:80%; border-radius:12px;}
-    #fullscreenModal button{padding:8px 14px;border-radius:10px;border:none;cursor:pointer; background:var(--accent); color:#071018; font-weight:600;}
+        .nav-btn {
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
 
-    footer{text-align:center;padding:14px;color:var(--muted);background:var(--panel);}
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
 
-    @media(max-width:600px){
-      main{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
-      header{flex-direction:column; gap:10px;}
-    }
-  </style>
+        .hero {
+            text-align: center;
+            padding: 80px 0 120px;
+            animation: fadeUp 1s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 72px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #a8b2ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: #b4b4c8;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 18px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .features {
+            padding: 100px 0;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 70px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #b4b4c8;
+            line-height: 1.6;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .pricing {
+            padding: 100px 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+        }
+
+        .pricing-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 56px;
+            font-weight: bold;
+            margin: 30px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            font-size: 18px;
+            color: #b4b4c8;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            color: #b4b4c8;
+            display: flex;
+            align-items: center;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto 100px;
+        }
+
+        .review-card {
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .stars {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .review-text {
+            color: #d4d4e0;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .reviewer-title {
+            color: #888;
+            font-size: 14px;
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 42px;
+            }
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            .section-title {
+                font-size: 36px;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">WallPix</div>
-    <nav>
-      <input type="text" id="searchInput" placeholder="Search wallpapers...">
-      <button class="btn" id="themeToggle">Toggle Theme</button>
-    </nav>
-  </header>
+    <div class="gradient-bg"></div>
+    
+    <div class="container">
+        <nav>
+            <div class="logo">BinanX</div>
+            <button class="nav-btn">Login</button>
+        </nav>
 
-  <main id="wallpaperGrid"></main>
+        <section class="hero">
+            <div class="hero-badge">🤖 Powered by AladinAI & GPT5</div>
+            <h1>Trade Smarter<br>with AI Precision</h1>
+            <p class="hero-subtitle">
+                BinanX leverages cutting-edge artificial intelligence to execute trades 24/7 on MT5. 
+                Let advanced algorithms powered by AladinAI and GPT5 work for you.
+            </p>
+            <div class="cta-buttons">
+                <button class="btn-primary">Start Trading Now</button>
+                <button class="btn-secondary">Watch Demo</button>
+            </div>
+        </section>
 
-  <div id="fullscreenModal">
-    <img id="modalImg" src="">
-    <div>
-      <button id="setWallpaper">Set as Wallpaper</button>
-      <a id="downloadLink" href="#" download><button>Download</button></a>
-      <button id="closeModal">Close</button>
+        <section class="features">
+            <h2 class="section-title">Why Choose BinanX?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI-Powered Intelligence</h3>
+                    <p>Harness the power of AladinAI and GPT5 for predictive market analysis and intelligent trade execution.</p>
+                    <span class="ai-badge">AladinAI + GPT5</span>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning-Fast Execution</h3>
+                    <p>Execute trades in milliseconds with optimized algorithms designed for MT5 platform integration.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Precision Trading</h3>
+                    <p>Advanced risk management and position sizing ensure optimal entry and exit points for maximum profit.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Reliable</h3>
+                    <p>Bank-grade encryption and secure API connections protect your capital and trading data at all times.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Monitor performance with comprehensive dashboards and detailed trading statistics in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <h3>24/7 Automation</h3>
+                    <p>Never miss an opportunity. BinanX trades around the clock, even while you sleep.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing">
+            <h2 class="section-title">What Our Traders Say</h2>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"BinanX has completely transformed my trading strategy. The AladinAI predictions are incredibly accurate, and I've seen consistent returns since day one. The yearly plan is worth every penny!"</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">MK</div>
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">Michael K.</div>
+                            <div class="reviewer-title">Professional Trader</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"I was skeptical at first, but BinanX exceeded all expectations. The GPT5 integration makes it feel like having a professional analyst working 24/7. My portfolio has grown 40% in 3 months!"</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">SL</div>
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">Sarah L.</div>
+                            <div class="reviewer-title">Crypto Investor</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"The automation is flawless. I can focus on my day job while BinanX handles the trading. The risk management features give me peace of mind. Best investment I've made this year!"</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">DJ</div>
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">David J.</div>
+                            <div class="reviewer-title">Part-Time Trader</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Monthly</h3>
+                    <div class="price">$99.99<span class="price-period">/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>Full MT5 Integration</li>
+                        <li>AladinAI & GPT5 Access</li>
+                        <li>Unlimited Trades</li>
+                        <li>Real-Time Analytics</li>
+                        <li>24/7 Support</li>
+                        <li>Risk Management Tools</li>
+                    </ul>
+                    <button class="btn-primary" onclick="buyPlan('Monthly')">Get Started</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Yearly</h3>
+                    <div class="price">$999.99<span class="price-period">/yr</span></div>
+                    <ul class="pricing-features">
+                        <li>Everything in Monthly</li>
+                        <li>Priority Support</li>
+                        <li>Advanced Strategies</li>
+                        <li>Custom Bot Training</li>
+                        <li>Performance Optimization</li>
+                        <li>Exclusive Updates</li>
+                    </ul>
+                    <button class="btn-primary" onclick="buyPlan('Yearly')">Get Started</button>
+                </div>
+            </div>
+        </section>
     </div>
-  </div>
 
-  <footer>© <span id="year"></span> WallPix. All rights reserved.</footer>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 BinanX. All rights reserved. Trading involves risk. Past performance does not guarantee future results.</p>
+        </div>
+    </footer>
 
-  <script>
-    const grid = document.getElementById('wallpaperGrid');
-    const modal = document.getElementById('fullscreenModal');
-    const modalImg = document.getElementById('modalImg');
-    const setBtn = document.getElementById('setWallpaper');
-    const downloadLink = document.getElementById('downloadLink');
-    const closeModal = document.getElementById('closeModal');
-    let page = 1;
-    let loading = false;
+    <script>
+        // Buy plan function
+        function buyPlan(plan) {
+            const email = 'algobuy@binanx.com';
+            const subject = `AladinAI BinanX ${plan} Plan Purchase Request`;
+            const body = `Hello,
 
-    function loadWallpapers(search=''){
-      if(loading) return;
-      loading = true;
-      fetch(`https://picsum.photos/v2/list?page=${page}&limit=12`)
-        .then(res => res.json())
-        .then(data => {
-          data.forEach(item => {
-            if(search && !item.author.toLowerCase().includes(search.toLowerCase())) return;
-            const div = document.createElement('div');
-            div.className = 'wallpaper-card';
-            div.innerHTML = `<img src='https://picsum.photos/id/${item.id}/400/300' alt='${item.author}' />`;
-            div.onclick = ()=>openModal(`https://picsum.photos/id/${item.id}/1200/800`);
-            grid.appendChild(div);
-          });
-          loading = false;
-        }).catch(()=>{loading=false;});
-    }
+I would like to purchase the BinanX ${plan} Plan ($99.99/${plan === 'Monthly' ? 'month' : 'year'}).
 
-    function openModal(url){
-      modal.style.display='flex';
-      modalImg.src=url;
-      downloadLink.href=url;
-      setBtn.onclick = ()=>{
-        document.body.style.backgroundImage=`url(${url})`;
-        document.body.style.backgroundSize='cover';
-        document.body.style.backgroundPosition='center';
-      };
-    }
+Please send me the payment details and activation instructions.
 
-    closeModal.onclick = ()=>{modal.style.display='none';};
+Thank you!`;
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
 
-    // infinite scroll
-    window.addEventListener('scroll',()=>{
-      if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 300){
-        page++;
-        loadWallpapers(document.getElementById('searchInput').value);
-      }
-    });
+        // Update hero CTA buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroCTA = document.querySelector('.hero .btn-primary');
+            if (heroCTA) {
+                heroCTA.onclick = function() {
+                    document.querySelector('.pricing').scrollIntoView({ behavior: 'smooth' });
+                };
+            }
+        });
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+        // Smooth scroll for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
 
-    // initial load
-    loadWallpapers();
+        // Animate feature cards on scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
 
-    // theme toggle
-    let dark = true;
-    document.getElementById('themeToggle').addEventListener('click',()=>{
-      dark = !dark;
-      if(dark){
-        document.body.style.backgroundColor='var(--bg)';
-        document.body.style.color='#e6eef6';
-      } else {
-        document.body.style.backgroundColor='#f6f8ff';
-        document.body.style.color='#071018';
-      }
-    });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
 
-    // search functionality
-    document.getElementById('searchInput').addEventListener('input',(e)=>{
-      grid.innerHTML='';
-      page=1;
-      loadWallpapers(e.target.value);
-    });
-  </script>
+        document.querySelectorAll('.feature-card, .pricing-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
